@@ -4,3 +4,4 @@ node_modules
 # Generated files
 tmp
 assets/css/tailwind.css
+views/**/*_templ.go
