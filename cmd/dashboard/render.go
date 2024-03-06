@@ -11,5 +11,5 @@ func render(ctx echo.Context, component templ.Component) error {
 }
 
 func homeHandler(c echo.Context) error {
-	return render(c, views.Home("Home"))
+	return render(c, views.Home("Dashboard"))
 }
