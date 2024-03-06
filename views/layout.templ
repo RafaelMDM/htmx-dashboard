@@ -1,20 +1,17 @@
 package views
 
 templ Layout(title string) {
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{ title }</title>
-    <script src="/assets/js/htmx.min.js"></script>
-    <link href="./assets/css/tailwind.css" rel="stylesheet" />
-</head>
-
-<body>
-    { children... }
-</body>
-
-</html>
+    <!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+            <title>{ title }</title>
+            <script src="/assets/js/htmx.min.js"></script>
+            <link href="./assets/css/tailwind.css" rel="stylesheet" />
+        </head>
+        <body>
+            { children... }
+        </body>
+    </html>
 }
