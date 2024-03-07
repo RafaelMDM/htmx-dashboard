@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
@@ -14,16 +13,18 @@ import (
 )
 
 func init_database(conn *libsql.Connection) error {
-	_, err := conn.Execute("CREATE TABLE test (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT)")
+	exists, err := conn.TableExists("test")
 	if err != nil {
 		return err
 	}
 
-	for i := 0; i < 10; i++ {
-		_, err = conn.Execute(fmt.Sprintf("INSERT INTO test (id, name) VALUES (%d, 'test-%d')", i, i))
-		if err != nil {
-			return err
-		}
+	if exists {
+		return nil
+	}
+
+	_, err = conn.Execute("CREATE TABLE test (id INTEGER PRIMARY KEY, name TEXT)")
+	if err != nil {
+		return err
 	}
 
 	return nil
@@ -42,10 +43,10 @@ func main() {
 		e.Logger.Fatal(err)
 	}
 
-	err = init_database(conn)
-	if err != nil {
-		e.Logger.Fatal(err)
-	}
+	err_ch := make(chan error, 1)
+	go func() {
+		err_ch <- init_database(conn)
+	}()
 
 	e.GET("/", homeHandler)
 
@@ -57,6 +58,11 @@ func main() {
 			e.Logger.Fatal("Shutting down the server")
 		}
 	}()
+
+	err = <-err_ch
+	if err != nil {
+		e.Logger.Fatal(err)
+	}
 
 	<-ctx.Done()
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
