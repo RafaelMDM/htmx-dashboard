@@ -1,0 +1,7 @@
+package views
+
+templ Icon(name string) {
+    <button class="p-2 w-12 h-12 rounded-full dark:bg-slate-950">
+        <img class="dark:fill-white dark:stroke-white" src={ "assets/images/" + name + ".svg" } onload="SVGInject(this)" />
+    </button>
+}
